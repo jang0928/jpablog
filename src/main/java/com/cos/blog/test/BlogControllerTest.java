@@ -10,6 +10,7 @@ public class BlogControllerTest {
 
     @GetMapping("test/hello")
     public String hello() {
-        return "<h1>Hellog St</h1>";
+        return "test2.html";
+
     }
 }

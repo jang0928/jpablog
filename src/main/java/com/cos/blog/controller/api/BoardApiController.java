@@ -1,8 +1,10 @@
 package com.cos.blog.controller.api;
 
 import com.cos.blog.config.auth.PrincipalDetail;
+import com.cos.blog.dto.ReplySaveRequstDto;
 import com.cos.blog.dto.ResponseDto;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.User;
 import com.cos.blog.service.BoardService;
 import com.cos.blog.service.UserService;
@@ -33,7 +35,21 @@ public class BoardApiController {
 
     @PutMapping("/api/board/{id}")
     public ResponseDto<Integer> updateById(@PathVariable int id, @RequestBody Board board) {
-        boardService.update(id,board);
+        boardService.update(id, board);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    //dto 사용하지 않은 이유는 ? ->
+    @PostMapping("/api/board/{boardId}/reply")
+    public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequstDto replySaveRequstDto) {
+        boardService.replySave(replySaveRequstDto);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+
+    }
+
+    @DeleteMapping("api/board/{boardId}/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable int replyId) {
+        boardService.replyDelete(replyId);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 

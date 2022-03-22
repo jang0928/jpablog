@@ -1,5 +1,6 @@
 package com.cos.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,13 +30,28 @@ public class Board {
     private String content;//섬머노트 라이브러리 <html> 태그가 섞여서 디자인이 됨
     private int count;
 
+    @Override
+    public String toString() {
+        return "Board{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", count=" + count +
+                ", user=" + user +
+                ", replys=" + replys +
+                ", createDate=" + createDate +
+                '}';
+    }
+
     @ManyToOne(fetch = FetchType.EAGER) //Many = board , User = one  환명 유저는 여러개 개시글을 쓴다
-    @JoinColumn(name ="userId")
+    @JoinColumn(name = "userId")
     private User user;//DB 는 오브젝트를 지정할 수없지만 자바는 가능하다 .
 
     //연관관계의 주인이 아니다 = 난 fk가 아니니 디비에 컬럼을 만들지 마세요 .
-    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER)
-    private List<Reply> reply;
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("id desc")
+    @JsonIgnoreProperties({"board"}) //무한참조 방지  board 를 통한 접근은 board를 무시한다.
+    private List<Reply> replys;
 
 
     @CreationTimestamp
